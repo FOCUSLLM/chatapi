@@ -56,9 +56,10 @@ systemctl enable nginx
 
 echo "✓ Nginx restarted and enabled"
 
-# Start Ollama service
-echo "Starting Ollama..."
-systemctl start ollama 2>/dev/null || echo "Note: Ollama service not found, you may need to start it manually with 'ollama serve'"
+# Configure Ollama to listen on all interfaces
+echo ""
+echo "Configuring Ollama..."
+bash configure_ollama.sh
 
 echo ""
 echo "=========================================="
@@ -66,14 +67,15 @@ echo "  ✓ Installation Complete!"
 echo "=========================================="
 echo ""
 echo "Your Ollama API is now running on:"
-echo "  - Port 80:   http://YOUR_SERVER_IP"
-echo "  - Port 9100: http://YOUR_SERVER_IP:9100"
+echo "  - Local (Port 80):   http://192.168.10.2"
+echo "  - Local (Port 9100): http://192.168.10.2:9100"
+echo "  - Public (Port 9100): http://197.13.2.177:9100"
 echo ""
 echo "Token: FOCUS_Corporation_a4e83f94514e155693c499c256e57a38"
 echo ""
 echo "Next steps:"
-echo "1. Make sure Ollama is running: ollama serve"
-echo "2. Pull a model: ollama pull gemma3:1b"
-echo "3. Test the API: bash test.sh"
+echo "1. Pull a model: ollama pull gemma3:1b"
+echo "2. Test local: bash test.sh"
+echo "3. Test public: bash test_public.sh"
 echo ""
 

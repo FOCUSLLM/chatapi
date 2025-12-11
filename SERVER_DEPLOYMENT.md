@@ -30,14 +30,21 @@ sudo bash deploy.sh
 - ✅ Configure Nginx with token authentication
 - ✅ Enable services on ports 80 and 9100
 
-### Step 4: Start Ollama
+### Step 4: Configure Ollama for Network Access ⚠️ IMPORTANT!
 ```bash
-# Option 1: Run in foreground (for testing)
-ollama serve
+# Configure Ollama to listen on all interfaces (not just localhost)
+chmod +x configure_ollama.sh
+sudo bash configure_ollama.sh
 
-# Option 2: Run in background (for production)
-nohup ollama serve > ollama.log 2>&1 &
+# Verify Ollama is listening on 0.0.0.0:11434 (not 127.0.0.1)
+sudo netstat -tlnp | grep :11434
+# Should show: 0.0.0.0:11434
 ```
+
+**Why this is important:**
+- By default, Ollama only listens on localhost (127.0.0.1)
+- Nginx needs to forward requests from public IP to Ollama
+- Ollama must listen on 0.0.0.0 to accept these forwarded requests
 
 ### Step 5: Pull Models
 ```bash
@@ -52,7 +59,11 @@ ollama pull gemma3:4b
 
 ### Step 6: Test the API
 ```bash
+# Test local network
 bash test.sh
+
+# Test public IP
+bash test_public.sh
 ```
 
 **Expected output:**
