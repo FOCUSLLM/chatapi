@@ -51,7 +51,8 @@ bash test.sh
 ## 🔑 Configuration
 
 **Default Settings** (edit `config.env` to change):
-- **Server IP:** `192.168.10.2`
+- **Local IP:** `192.168.10.2`
+- **Public IP:** `197.13.2.177`
 - **API Port:** `9100`
 - **Token:** `FOCUS_Corporation_a4e83f94514e155693c499c256e57a38`
 - **Test Model:** `gemma3:1b`
@@ -60,9 +61,13 @@ bash test.sh
 
 ## 🧪 Testing
 
-### Bash Test Script
+### Bash Test Scripts
 ```bash
+# Test local network
 bash test.sh
+
+# Test public IP
+bash test_public.sh
 ```
 
 ### Python Test Scripts
@@ -74,11 +79,12 @@ pip install -r requirements.txt
 
 **Run tests:**
 ```bash
-# Full test suite (6 tests)
-python3 test_remote.py
+# Test local network
+python3 test_remote.py    # Full test suite (6 tests)
+python3 simple_test.py    # Quick test
 
-# Quick test
-python3 simple_test.py
+# Test public IP
+python3 test_public.py    # Public IP test (5 tests)
 
 # OpenAI library example
 python3 openai_example.py
@@ -89,21 +95,29 @@ python3 openai_example.py
 ## 📡 API Endpoints
 
 Your API will be accessible on:
-- **Port 80:** `http://YOUR_SERVER_IP`
-- **Port 9100:** `http://YOUR_SERVER_IP:9100`
+- **Local Network (Port 80):** `http://192.168.10.2`
+- **Local Network (Port 9100):** `http://192.168.10.2:9100`
+- **Public IP (Port 9100):** `http://197.13.2.177:9100`
 
 ---
 
 ## 🔥 Usage Examples
 
-### Using curl
+### Using curl (Local Network)
 ```bash
 curl -H "Authorization: Bearer FOCUS_Corporation_a4e83f94514e155693c499c256e57a38" \
      -d '{"model": "gemma3:1b", "prompt": "Hello!", "stream": false}' \
      http://192.168.10.2:9100/api/generate
 ```
 
-### Using Python
+### Using curl (Public IP)
+```bash
+curl -H "Authorization: Bearer FOCUS_Corporation_a4e83f94514e155693c499c256e57a38" \
+     -d '{"model": "gemma3:1b", "prompt": "Hello!", "stream": false}' \
+     http://197.13.2.177:9100/api/generate
+```
+
+### Using Python (Local Network)
 ```python
 import requests
 
@@ -116,12 +130,26 @@ response = requests.post(
 print(response.json()['response'])
 ```
 
+### Using Python (Public IP)
+```python
+import requests
+
+response = requests.post(
+    "http://197.13.2.177:9100/api/generate",
+    headers={"Authorization": "Bearer FOCUS_Corporation_a4e83f94514e155693c499c256e57a38"},
+    json={"model": "gemma3:1b", "prompt": "Hello!", "stream": False}
+)
+
+print(response.json()['response'])
+```
+
 ### Using OpenAI Library
 ```python
 from openai import OpenAI
 
+# Use local IP or public IP
 client = OpenAI(
-    base_url="http://192.168.10.2:9100/v1",
+    base_url="http://197.13.2.177:9100/v1",  # or http://192.168.10.2:9100/v1
     api_key="FOCUS_Corporation_a4e83f94514e155693c499c256e57a38"
 )
 
